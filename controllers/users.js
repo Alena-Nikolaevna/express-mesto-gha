@@ -32,7 +32,11 @@ const getUser = (req, res) => {
 
   User.findById(userId)
   .then((user) => {
-    res.send(user)
+    if (!user) {
+      res.status(400).send({ message: "Запрашиваемый пользователь не найден" });
+    } else {
+      res.send(user);
+    }
   })
   .catch((error) => {
     res.status(400).send(error);
