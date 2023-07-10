@@ -44,7 +44,7 @@ const updateUserProfile = (req, res) => {
   const { name, about } = req.body;
 
   // обновим имя, о себе найденного по _id пользователя
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
   .then((user) => {
     res.send(user)
   })
@@ -58,7 +58,7 @@ const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
 
   // обновим аватар найденного по _id пользователя
-  User.findByIdAndUpdate(req.user._id, { avatar })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
   .then((user) => {
     res.send(user)
   })
