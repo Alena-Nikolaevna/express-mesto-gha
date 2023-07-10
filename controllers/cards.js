@@ -22,8 +22,8 @@ const getCards = (req, res) => {
   .then((cards) => {
     res.send(cards)
   })
-  .catch((error) => {
-    res.status(400).send(error);
+  .catch(() => {
+    res.status(500).send({ message: "Ошибка по умолчанию." });
   })
 }
 
