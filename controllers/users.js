@@ -7,24 +7,23 @@ const createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => {
-      res.send(user)
+      res.send(user);
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 // возвращает всех пользователей
 const getUsers = (req, res) => {
-
   User.find({})
     .then((users) => {
-      res.send(users)
+      res.send(users);
     })
     .catch(() => {
       res.status(ERROR_DEFAULT).send(MESSAGE_ERROR_DEFAULT);
-    })
-}
+    });
+};
 
 // возвращает пользователя по _id
 const getUser = (req, res) => {
@@ -40,8 +39,8 @@ const getUser = (req, res) => {
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 // обновляет профиль
 const updateUserProfile = (req, res) => {
@@ -58,8 +57,8 @@ const updateUserProfile = (req, res) => {
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 // обновляет аватар
 const updateUserAvatar = (req, res) => {
@@ -76,8 +75,8 @@ const updateUserAvatar = (req, res) => {
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 module.exports = {
   createUser,

@@ -9,4 +9,3 @@ cardRouter.put('/:cardId/likes', likeCard); //PUT /cards/:cardId/likes — по�
 cardRouter.delete('/:cardId/likes', dislikeCard); //DELETE /cards/:cardId/likes — убрать лайк с карточки
 
 module.exports = cardRouter;
-

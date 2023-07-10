@@ -1,35 +1,35 @@
 const mongoose = require('mongoose');
 
-//Поля схемы карточки:
+//Поля схемы карточки
 const cardSchema = new mongoose.Schema({
-  name: {  //name — имя карточки
+//name — имя карточки
+  name: {
     type: String,
     required: true,
     minlength: 2,
-    maxLength: 30
+    maxLength: 30,
   },
   link: {  //link — ссылка на картинку
     type: String,
-    required: true
+    required: true,
   },
   owner: {  //owner — ссылка на модель автора карточки
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'user'
+    ref: 'user',
   },
   likes: [{  //likes — список лайкнувших пост пользователей
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'user',
-    default: []
+    default: [],
   }],
   createdAt: {  //createdAt — дата создания
     type: Date,
     required: true,
-    default: Date.now
-  }
-})
+    default: Date.now,
+  },
+});
 
 const Card = mongoose.model('card', cardSchema);
-
 module.exports = Card;

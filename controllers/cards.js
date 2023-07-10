@@ -8,24 +8,23 @@ const createCard = (req, res) => {
 
   Card.create({ name, link, owner })
     .then((card) => {
-      res.send(card)
+      res.send(card);
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 //возвращает все карточки
 const getCards = (req, res) => {
-
   Card.find({})
     .then((cards) => {
-      res.send(cards)
+      res.send(cards);
     })
     .catch(() => {
       res.status(ERROR_DEFAULT).send(MESSAGE_ERROR_DEFAULT);
-    })
-}
+    });
+};
 
 //удаляет карточку по идентификатору
 const deleteCard = (req, res) => {
@@ -41,12 +40,11 @@ const deleteCard = (req, res) => {
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 // поставить лайк карточке
 const likeCard = (req, res) => {
-
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
@@ -60,12 +58,11 @@ const likeCard = (req, res) => {
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 // убрать лайк с карточки
 const dislikeCard = (req, res) => {
-
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
@@ -79,8 +76,8 @@ const dislikeCard = (req, res) => {
     })
     .catch((error) => {
       showError(res, error);
-    })
-}
+    });
+};
 
 module.exports = {
   createCard,
@@ -89,7 +86,3 @@ module.exports = {
   likeCard,
   dislikeCard
 }
-
-/*module.exports.createCard = (req, res) => {
-  console.log(req.user._id); // _id станет доступен
-};*/
