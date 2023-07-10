@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+//const helmet = require('helmet');
 const app = express();
 
 const userRouter = require('./routes/users');
@@ -13,6 +14,7 @@ const { ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND } = require('./utils/error')
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(bodyParser.json());
+//app.use(helmet());
 
 app.use((req, res, next) => {
   req.user = {
