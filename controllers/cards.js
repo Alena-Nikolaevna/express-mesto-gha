@@ -67,7 +67,11 @@ const dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true })
     .then((card) => {
-      res.send(card)
+      if (!card) {
+        res.status(404).send({ message: "Запрашиваемая карточка не найдена" });
+      } else {
+        res.send(card);
+      }
     })
     .catch((error) => {
       res.status(400).send(error);
