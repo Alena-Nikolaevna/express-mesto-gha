@@ -39,7 +39,7 @@ const getUser = (req, res) => {
     }
   })
   .catch((error) => {
-    res.status(404).send(error);
+    res.status(400).send(error);
   })
 }
 
