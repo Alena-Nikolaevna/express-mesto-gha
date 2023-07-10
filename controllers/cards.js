@@ -1,4 +1,5 @@
 const Card = require('../models/card');
+const showError = require('../utils/error');
 
 //создаёт карточку
 const createCard = (req, res) => {
@@ -10,7 +11,7 @@ const createCard = (req, res) => {
     res.send(card)
   })
   .catch((error) => {
-    res.status(400).send(error);
+    showError(res, error);
   })
 }
 
@@ -40,7 +41,7 @@ const deleteCard = (req, res) => {
     }
   })
   .catch((error) => {
-    res.status(400).send(error);
+    showError(res, error);
   })
 }
 
@@ -59,7 +60,7 @@ const likeCard = (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(400).send(error);
+      showError(res, error);
     })
 }
 
@@ -78,7 +79,7 @@ const dislikeCard = (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(400).send(error);
+      showError(res, error);
     })
 }
 

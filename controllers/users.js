@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const showError = require('../utils/error');
 
 // создаёт пользователя
 const createUser = (req, res) => {
@@ -9,7 +10,7 @@ const createUser = (req, res) => {
     res.send(user)
   })
   .catch((error) => {
-    res.status(400).send(error);
+    showError(res, error);
   })
 }
 
@@ -39,7 +40,7 @@ const getUser = (req, res) => {
     }
   })
   .catch((error) => {
-    res.status(400).send(error);
+    showError(res, error);
   })
 }
 
@@ -57,7 +58,7 @@ const updateUserProfile = (req, res) => {
     }
   })
   .catch((error) => {
-    res.status(400).send(error);
+    showError(res, error);
   })
 }
 
@@ -75,7 +76,7 @@ const updateUserAvatar = (req, res) => {
     }
   })
   .catch((error) => {
-    res.status(400).send(error);
+    showError(res, error);
   })
 }
 
