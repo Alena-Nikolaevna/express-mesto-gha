@@ -64,7 +64,11 @@ const updateUserAvatar = (req, res) => {
   // обновим аватар найденного по _id пользователя
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
   .then((user) => {
-    res.send(user)
+    if (!user) {
+      res.status(404).send({ message: "Данные по указанному _id не найдены." });
+    } else {
+      res.send(user);
+    }
   })
   .catch((error) => {
     res.status(400).send(error);
