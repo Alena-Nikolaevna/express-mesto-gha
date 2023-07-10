@@ -7,42 +7,41 @@ const createCard = (req, res) => {
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-  .then((card) => {
-    res.send(card)
-  })
-  .catch((error) => {
-    showError(res, error);
-  })
+    .then((card) => {
+      res.send(card)
+    })
+    .catch((error) => {
+      showError(res, error);
+    })
 }
 
 //возвращает все карточки
 const getCards = (req, res) => {
 
   Card.find({})
-  .then((cards) => {
-    res.send(cards)
-  })
-  .catch(() => {
-    res.status(500).send({ message: "Ошибка по умолчанию." });
-  })
+    .then((cards) => {
+      res.send(cards)
+    })
+    .catch(() => {
+      res.status(500).send({ message: "Ошибка по умолчанию." });
+    })
 }
 
 //удаляет карточку по идентификатору
 const deleteCard = (req, res) => {
-
   const { cardId } = req.params;
 
   Card.findByIdAndDelete(cardId)
-  .then((card) => {
-    if (!card) {
-      res.status(404).send({ message: "Ошибка по умолчанию." });
-    } else {
-      res.send(card);
-    }
-  })
-  .catch((error) => {
-    showError(res, error);
-  })
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: "Ошибка по умолчанию." });
+      } else {
+        res.send(card);
+      }
+    })
+    .catch((error) => {
+      showError(res, error);
+    })
 }
 
 // поставить лайк карточке

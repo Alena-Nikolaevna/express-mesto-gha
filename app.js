@@ -6,7 +6,7 @@ const app = express();
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
-//mongoose.connect('mongodb://localhost:27017/mestodb');
+// mongoose.connect('mongodb://localhost:27017/mestodb');
 // подключаемся к серверу mongo
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
@@ -29,5 +29,5 @@ app.use((req, res) => {
 
 app.listen(3000, () => {
   // eslint-disable-next-line no-console
-    console.log("Сервер запущен");
+  console.log("Сервер запущен");
 })
