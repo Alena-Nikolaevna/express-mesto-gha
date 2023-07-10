@@ -33,7 +33,11 @@ const deleteCard = (req, res) => {
 
   Card.findByIdAndDelete(cardId)
   .then((card) => {
-    res.send(card)
+    if (!card) {
+      res.status(404).send({ message: "Ошибка по умолчанию." });
+    } else {
+      res.send(card);
+    }
   })
   .catch((error) => {
     res.status(400).send(error);
