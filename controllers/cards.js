@@ -1,6 +1,6 @@
 const Card = require('../models/card');
 const {
-  showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT
+  showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT,
 } = require('../utils/error');
 
 // создаёт карточку
@@ -50,7 +50,8 @@ const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true })
+    { new: true },
+  )
     .then((card) => {
       if (!card) {
         res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
@@ -68,7 +69,8 @@ const dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
-    { new: true })
+    { new: true },
+  )
     .then((card) => {
       if (!card) {
         res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
@@ -86,5 +88,5 @@ module.exports = {
   getCards,
   deleteCard,
   likeCard,
-  dislikeCard
-}
+  dislikeCard,
+};

@@ -22,5 +22,5 @@ module.exports = {
   MESSAGE_ERROR_NOT_FOUND,
   ERROR_DEFAULT,
   MESSAGE_ERROR_DEFAULT,
-  showError
-}
+  showError,
+};
