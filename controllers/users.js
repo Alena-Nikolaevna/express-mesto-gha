@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const showError = require('../utils/error');
+const { showError, ERROR_CODE, ERROR_NOT_FOUND, ERROR_DEFAULT } = require('../utils/error');
 
 // создаёт пользователя
 const createUser = (req, res) => {
@@ -22,7 +22,7 @@ const getUsers = (req, res) => {
       res.send(users)
     })
     .catch(() => {
-      res.status(500).send({ message: "Ошибка по умолчанию." });
+      res.status(ERROR_DEFAULT).send({ message: "Ошибка по умолчанию." });
     })
 }
 
@@ -33,7 +33,7 @@ const getUser = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: "Запрашиваемый пользователь не найден" });
+        res.status(ERROR_NOT_FOUND).send({ message: "Запрашиваемый пользователь не найден" });
       } else {
         res.send(user);
       }
@@ -51,7 +51,7 @@ const updateUserProfile = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: "Данные по указанному _id не найдены." });
+        res.status(ERROR_NOT_FOUND).send({ message: "Данные по указанному _id не найдены." });
       } else {
         res.send(user);
       }
@@ -69,7 +69,7 @@ const updateUserAvatar = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: "Данные по указанному _id не найдены." });
+        res.status(ERROR_NOT_FOUND).send({ message: "Данные по указанному _id не найдены." });
       } else {
         res.send(user);
       }

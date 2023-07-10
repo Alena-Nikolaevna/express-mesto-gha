@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const showError = require('../utils/error');
+const { showError, ERROR_CODE, ERROR_NOT_FOUND, ERROR_DEFAULT } = require('../utils/error');
 
 //создаёт карточку
 const createCard = (req, res) => {
@@ -23,7 +23,7 @@ const getCards = (req, res) => {
       res.send(cards)
     })
     .catch(() => {
-      res.status(500).send({ message: "Ошибка по умолчанию." });
+      res.status(ERROR_DEFAULT).send({ message: "Ошибка по умолчанию." });
     })
 }
 
@@ -34,7 +34,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndDelete(cardId)
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: "Ошибка по умолчанию." });
+        res.status(ERROR_NOT_FOUND).send({ message: "Ошибка по умолчанию." });
       } else {
         res.send(card);
       }
@@ -53,7 +53,7 @@ const likeCard = (req, res) => {
     { new: true })
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: "Запрашиваемая карточка не найдена" });
+        res.status(ERROR_NOT_FOUND).send({ message: "Запрашиваемая карточка не найдена" });
       } else {
         res.send(card);
       }
@@ -72,7 +72,7 @@ const dislikeCard = (req, res) => {
     { new: true })
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: "Запрашиваемая карточка не найдена" });
+        res.status(ERROR_NOT_FOUND).send({ message: "Запрашиваемая карточка не найдена" });
       } else {
         res.send(card);
       }
