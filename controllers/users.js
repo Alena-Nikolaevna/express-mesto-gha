@@ -1,5 +1,7 @@
 const User = require('../models/user');
-const { showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT } = require('../utils/error');
+const {
+  showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT
+} = require('../utils/error');
 
 // создаёт пользователя
 const createUser = (req, res) => {

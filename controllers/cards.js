@@ -1,7 +1,9 @@
 const Card = require('../models/card');
-const { showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT } = require('../utils/error');
+const {
+  showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT
+} = require('../utils/error');
 
-//создаёт карточку
+// создаёт карточку
 const createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
@@ -15,7 +17,7 @@ const createCard = (req, res) => {
     });
 };
 
-//возвращает все карточки
+// возвращает все карточки
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => {
@@ -26,7 +28,7 @@ const getCards = (req, res) => {
     });
 };
 
-//удаляет карточку по идентификатору
+// удаляет карточку по идентификатору
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
 
