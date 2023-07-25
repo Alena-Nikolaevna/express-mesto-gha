@@ -6,7 +6,8 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
 const app = express();
-
+const { login, createUser } = require('./controllers/users');
+const authMiddleware = require('./middlewares/auth');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
@@ -33,16 +34,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64a800a320a17f637adf73f2',
-  };
-
-  next();
-});
-
+app.post('/signin', login);
+app.post('/signup', createUser);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
+app.use(authMiddleware);
 
 app.use((req, res) => {
   res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);

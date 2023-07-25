@@ -1,19 +1,37 @@
+const bcrypt = require('bcryptjs');
+
+const jwt = require('jsonwebtoken');
+
 const User = require('../models/user');
+
+const SALT_ROUNDS = 10;
 const {
   showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT,
 } = require('../utils/error');
 
 // создаёт пользователя
-const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
+const createUser = (req, res, next) => {
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
 
-  User.create({ name, about, avatar })
-    .then((user) => {
-      res.send(user);
+  bcrypt.hash(password, SALT_ROUNDS)
+    .then((hashedPassword) => {
+      User.create({
+        name,
+        about,
+        avatar,
+        email,
+        password: hashedPassword,
+      })
+        .then((user) => res.send(user))
+        .catch(next);
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 // возвращает всех пользователей
@@ -80,10 +98,42 @@ const updateUserAvatar = (req, res) => {
     });
 };
 
+const login = (req, res, next) => {
+  // Получаем из запроса почту и пароль
+  const { email, password } = req.body;
+
+  // Проверяем, есть ли пользователь с такой почтой
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      // создадим токен
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      // вернём токен
+      res.send({ token });
+    })
+    .catch(next);
+};
+
+/** GET-запрос. Получить пользователя по адресу /me */
+const getCurrentUserInform = (req, res, next) => {
+  const userId = req.user._id;
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        throw new Error('Пользователь с таким id не найден');
+      } else {
+        res.send(user);
+      }
+    })
+    .catch(next);
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUserProfile,
   updateUserAvatar,
+  login,
+  getCurrentUserInform,
 };
