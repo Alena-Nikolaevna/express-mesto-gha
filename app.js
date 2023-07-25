@@ -36,9 +36,9 @@ app.use(bodyParser.json());
 
 app.post('/signin', login);
 app.post('/signup', createUser);
+app.use(authMiddleware);
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
-app.use(authMiddleware);
 
 app.use((req, res) => {
   res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
