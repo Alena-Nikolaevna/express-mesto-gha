@@ -86,7 +86,13 @@ const updateUserProfile = (req, res, next) => {
         res.send(user);
       }
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Некорректные данные при создании карточки'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 // обновляет аватар
@@ -102,7 +108,13 @@ const updateUserAvatar = (req, res, next) => {
         res.send(user);
       }
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Некорректные данные при создании карточки'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 //  Проверяет полученные в теле запроса почту и пароль
