@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
 const app = express();
+const { errors } = require('celebrate');
+
 const { login, createUser } = require('./controllers/users');
 const authMiddleware = require('./middlewares/auth');
 const userRouter = require('./routes/users');
@@ -47,6 +49,7 @@ app.use((req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
 
+app.use(errors());
 app.use(errorMiddlewares); // централизованная обработка ошибок
 
 app.listen(3000, () => {
