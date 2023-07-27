@@ -88,7 +88,7 @@ const updateUserProfile = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Некорректные данные при создании карточки'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       } else {
         next(err);
       }
@@ -110,7 +110,7 @@ const updateUserAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Некорректные данные при создании карточки'));
+        next(new BadRequestError('Переданы некорректные данные'));
       } else {
         next(err);
       }
