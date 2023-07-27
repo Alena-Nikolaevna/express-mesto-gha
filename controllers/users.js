@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError'); // 404 ошибка
+const ConflictError = require('../errors/ConflictError'); // 409
+const BadRequestError = require('../errors/BadRequestError'); // 400
 
 const SALT_ROUNDS = 10;
 
@@ -34,7 +36,13 @@ const createUser = (req, res, next) => {
             email: user.email,
           });
         })
-        .catch(next);
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            throw new BadRequestError('Переданы некорректные данные при создании пользователя');
+          } else if (err.code === 11000) {
+            throw new ConflictError('Пользователь с таким email уже существует');
+          }
+        });
     })
     .catch(next);
 };
