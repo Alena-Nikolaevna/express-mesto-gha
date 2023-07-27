@@ -26,23 +26,23 @@ const createUser = (req, res, next) => {
         avatar,
         email,
         password: hashedPassword,
-      })
-        .then((user) => {
-          res.status(201).send({
-            _id: user._id,
-            name: user.name,
-            about: user.about,
-            avatar: user.avatar,
-            email: user.email,
-          });
-        })
-        .catch((err) => {
-          if (err.name === 'ValidationError') {
-            throw new BadRequestError('Переданы некорректные данные при создании пользователя');
-          } else if (err.code === 11000) {
-            throw new ConflictError('Пользователь с таким email уже существует');
-          }
-        });
+      });
+    })
+    .then((user) => {
+      res.status(201).send({
+        _id: user._id,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw new BadRequestError('Переданы некорректные данные при создании пользователя');
+      } else if (err.code === 11000) {
+        throw new ConflictError('Пользователь с таким email уже существует');
+      }
     })
     .catch(next);
 };
