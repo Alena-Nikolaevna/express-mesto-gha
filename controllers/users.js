@@ -33,9 +33,9 @@ const createUser = (req, res, next) => {
             avatar: user.avatar,
             email: user.email,
           });
-        })
-        .catch(next);
+        });
     })
+    .catch(next)
     .catch(next);
 };
 
