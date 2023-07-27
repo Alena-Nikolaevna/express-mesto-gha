@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const UnauthorizedError = require('../errors/UnauthorizedError'); // 401
 
 // middleware авторизации для проверки JWT
 module.exports = (req, res, next) => {
@@ -7,9 +8,7 @@ module.exports = (req, res, next) => {
 
   // Убеждаемся, что он есть или начинается с Bearer
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new UnauthorizedError('Необходима авторизация');
   }
 
   // Если токен на месте, извлечём его.
@@ -24,9 +23,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, 'some-secret-key');
   } catch (err) {
     // Отправим ошибку, если не получилось верифицировать
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new UnauthorizedError('Необходима авторизация');
   }
 
   req.user = payload; // добавляет в объект запроса payload токена

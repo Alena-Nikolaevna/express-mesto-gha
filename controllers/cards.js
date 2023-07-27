@@ -1,52 +1,52 @@
 const Card = require('../models/card');
-const {
-  showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT,
-} = require('../utils/error');
+const NotFoundError = require('../errors/NotFoundError'); // 404 ошибка
+const ForbiddenError = require('../errors/ForbiddenError'); // 403 ошибка
 
 // создаёт карточку
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
     .then((card) => {
-      res.send(card);
+      res.status(201).res.send(card);
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 // возвращает все карточки
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
       res.send(cards);
     })
-    .catch(() => {
-      res.status(ERROR_DEFAULT).send(MESSAGE_ERROR_DEFAULT);
-    });
+    .catch(next);
 };
 
 // удаляет карточку по идентификатору
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findByIdAndDelete(cardId)
     .then((card) => {
       if (!card) {
-        res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
+      }
+      if (card.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('В доступе отказано. Удалить чужую карточку нельзя.');
       } else {
-        res.send(card);
+        Card.deleteOne(card)
+          .then(() => {
+            res.send({ message: 'Карточка удалена.' });
+          })
+          .catch(next);
       }
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 // поставить лайк карточке
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
@@ -54,18 +54,16 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
       } else {
         res.send(card);
       }
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 // убрать лайк с карточки
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
@@ -73,14 +71,12 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
       } else {
         res.send(card);
       }
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 module.exports = {

@@ -3,11 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const NotFoundError = require('../errors/NotFoundError'); // 404 ошибка
 
 const SALT_ROUNDS = 10;
-const {
-  showError, ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND, ERROR_DEFAULT, MESSAGE_ERROR_DEFAULT,
-} = require('../utils/error');
 
 // создаёт пользователя
 const createUser = (req, res, next) => {
@@ -28,74 +26,66 @@ const createUser = (req, res, next) => {
         email,
         password: hashedPassword,
       })
-        .then((user) => res.send(user))
+        .then((user) => res.status(201).res.send(user))
         .catch(next);
     })
     .catch(next);
 };
 
 // возвращает всех пользователей
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.send(users);
     })
-    .catch(() => {
-      res.status(ERROR_DEFAULT).send(MESSAGE_ERROR_DEFAULT);
-    });
+    .catch(next);
 };
 
 // возвращает пользователя по _id
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
+        throw new NotFoundError('Пользователь с указанным _id не найден.');
       } else {
         res.send(user);
       }
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 // обновляет профиль
-const updateUserProfile = (req, res) => {
+const updateUserProfile = (req, res, next) => {
   const { name, about } = req.body;
 
   // обновим имя, о себе найденного по _id пользователя
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
+        throw NotFoundError('Пользователь с указанным _id не найден.');
       } else {
         res.send(user);
       }
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 // обновляет аватар
-const updateUserAvatar = (req, res) => {
+const updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   // обновим аватар найденного по _id пользователя
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
+        throw NotFoundError('Пользователь с указанным _id не найден.');
       } else {
         res.send(user);
       }
     })
-    .catch((error) => {
-      showError(res, error);
-    });
+    .catch(next);
 };
 
 //  Проверяет полученные в теле запроса почту и пароль
@@ -121,7 +111,7 @@ const getCurrentUserInform = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new Error('Пользователь с таким id не найден');
+        throw new NotFoundError('Пользователь с указанным _id не найден.');
       } else {
         res.send(user);
       }

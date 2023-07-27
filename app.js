@@ -13,8 +13,8 @@ const cardRouter = require('./routes/cards');
 
 const errorMiddlewares = require('./middlewares/error');
 
-const { ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND } = require('./utils/error');
-const { signinValidation, signupValidation} = require('./middlewares/validations');
+const NotFoundError = require('./errors/NotFoundError'); // 404 ошибка
+const { signinValidation, signupValidation } = require('./middlewares/validations');
 
 // чтобы использовать его на сервере только для API,
 // где ограничитель скорости должен применяться ко всем запросам
@@ -43,8 +43,8 @@ app.use(authMiddleware); // все роуты (кроме /signin и /signup) з
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
-app.use((req, res) => {
-  res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
+app.use((req, res, next) => {
+  next(new NotFoundError('Страница не найдена'));
 });
 
 app.use(errorMiddlewares); // централизованная обработка ошибок

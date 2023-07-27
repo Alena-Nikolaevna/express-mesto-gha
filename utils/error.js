@@ -1,10 +1,10 @@
-const ERROR_CODE = 400;
+/* const ERROR_CODE = 400; // BadRequestError
 const MESSAGE_ERROR_CODE = { message: 'Переданы некорректные данные.' };
 
-const ERROR_NOT_FOUND = 404;
+const ERROR_NOT_FOUND = 404; // NOT_FOUND_ERROR
 const MESSAGE_ERROR_NOT_FOUND = { message: 'Страница не найдена' };
 
-const ERROR_DEFAULT = 500;
+const ERROR_DEFAULT = 500; // ServerError
 const MESSAGE_ERROR_DEFAULT = { message: 'На сервере произошла ошибка.' };
 
 const showError = (res, err) => {
@@ -23,4 +23,4 @@ module.exports = {
   ERROR_DEFAULT,
   MESSAGE_ERROR_DEFAULT,
   showError,
-};
+}; */
