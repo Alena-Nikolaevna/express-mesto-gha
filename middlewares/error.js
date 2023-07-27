@@ -10,7 +10,7 @@ const errorMiddlewares = (err, req, res, next) => {
     return;
   }
   if (statusCode === ServerError) {
-    res.status(statusCode).send({ message: 'На сервере произошла ошибка' });
+    res.status(ServerError).send({ message: 'На сервере произошла ошибка' });
     return;
   }
 
