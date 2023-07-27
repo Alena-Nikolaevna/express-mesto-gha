@@ -5,7 +5,7 @@ const ERROR_NOT_FOUND = 404;
 const MESSAGE_ERROR_NOT_FOUND = { message: 'Страница не найдена' };
 
 const ERROR_DEFAULT = 500;
-const MESSAGE_ERROR_DEFAULT = { message: 'Ошибка по умолчанию.' };
+const MESSAGE_ERROR_DEFAULT = { message: 'На сервере произошла ошибка.' };
 
 const showError = (res, err) => {
   if (err.name === 'ValidationError' || err.name === 'CastError') {

@@ -11,7 +11,10 @@ const authMiddleware = require('./middlewares/auth');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
+const errorMiddlewares = require('./middlewares/error');
+
 const { ERROR_NOT_FOUND, MESSAGE_ERROR_NOT_FOUND } = require('./utils/error');
+const { signinValidation, signupValidation} = require('./middlewares/validations');
 
 // чтобы использовать его на сервере только для API,
 // где ограничитель скорости должен применяться ко всем запросам
@@ -34,15 +37,17 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(bodyParser.json());
 
-app.post('/signin', login);
-app.post('/signup', createUser);
-app.use(authMiddleware);
+app.post('/signin', signinValidation, login);
+app.post('/signup', signupValidation, createUser);
+app.use(authMiddleware); // все роуты (кроме /signin и /signup) защищены авторизацией
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
 app.use((req, res) => {
   res.status(ERROR_NOT_FOUND).send(MESSAGE_ERROR_NOT_FOUND);
 });
+
+app.use(errorMiddlewares); // централизованная обработка ошибок
 
 app.listen(3000, () => {
   // eslint-disable-next-line no-console

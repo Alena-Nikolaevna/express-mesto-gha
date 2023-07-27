@@ -98,6 +98,7 @@ const updateUserAvatar = (req, res) => {
     });
 };
 
+//  Проверяет полученные в теле запроса почту и пароль
 const login = (req, res, next) => {
   // Получаем из запроса почту и пароль
   const { email, password } = req.body;

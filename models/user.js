@@ -28,14 +28,14 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     validate: {
-      validator: (email) => validator.isEmail(email),
-      message: 'Некорректый адрес email',
+      validator: (email) => validator.isEmail(email), // поле email пользователя валидируется -
+      message: 'Некорректый адрес email', // на соответствие паттерну почты
     },
   },
   password: {
     type: String,
     required: true,
-    select: false,
+    select: false, // теперь API не будет возвращать хеш пароля
   },
 });
 
@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
 userSchema.statics.findUserByCredentials = function (email, password) {
   // попытаемся найти пользователя по почте
   return this.findOne({ email }) // this — это модель User
-    .select('+password')
+    .select('+password') // в случае аутентификации хеш пароля нужен, поэтому добавляем: .select('+password')
     .then((user) => {
       // не нашёлся — отклоняем промис
       if (!user) {
