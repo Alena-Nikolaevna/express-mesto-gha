@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 // Поля схемы карточки
 const cardSchema = new mongoose.Schema({
@@ -12,6 +13,10 @@ const cardSchema = new mongoose.Schema({
   link: { // link — ссылка на картинку
     type: String,
     required: true,
+    validate: {
+      validator: (link) => validator.isURL(link),
+      message: 'Некорректная ссылка URL',
+    },
   },
   owner: { // owner — ссылка на модель автора карточки
     type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +31,7 @@ const cardSchema = new mongoose.Schema({
   }],
   createdAt: { // createdAt — дата создания
     type: Date,
-    required: true,
+    // required: true,
     default: Date.now,
   },
 });
