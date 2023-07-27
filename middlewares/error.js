@@ -2,8 +2,7 @@ const ServerError = require('../errors/ServerError'); // 500 ошибка
 const ConflictError = require('../errors/ConflictError'); // 409
 
 const errorMiddlewares = (err, req, res, next) => {
-  const { statusCode = ServerError } = err;
-  const message = statusCode === ServerError ? 'На сервере произошла ошибка.' : err.message;
+  const { statusCode = ServerError, message } = err;
 
   if (err.code === 11000) {
     res.status(ConflictError).send({ message: 'Пользователь с указанным email уже существует' });
