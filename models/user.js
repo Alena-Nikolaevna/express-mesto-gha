@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false, // теперь API не будет возвращать хеш пароля
   },
-}, { versionKey: false });
+});
 
 // добавим метод findUserByCredentials схеме пользователя
 // у него будет два параметра — почта и пароль
