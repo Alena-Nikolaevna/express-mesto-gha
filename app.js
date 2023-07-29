@@ -12,6 +12,9 @@ const app = express();
 const errorMiddlewares = require('./middlewares/error');
 const router = require('./routes/index');
 
+// импортируем логгеры
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
 // для защиты приложения от некоторых широко известных веб-уязвимостей
 app.use(helmet());
 
@@ -23,9 +26,16 @@ app.use(limiter);
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(bodyParser.json());
-app.use(router);
 
-app.use(errors()); // обработка ошибок celebrate
+// Логгер запросов нужно подключить до всех обработчиков роутов
+app.use(requestLogger); // подключаем логгер запросов
+
+app.use(router); // обработчиков роутов
+
+// логгер ошибок нужно подключить после обработчиков роутов и до обработчиков ошибок
+app.use(errorLogger); // подключаем логгер ошибок
+
+app.use(errors()); // обработчик ошибок celebrate
 app.use(errorMiddlewares); // централизованная обработка ошибок
 
 app.listen(3000, () => {
